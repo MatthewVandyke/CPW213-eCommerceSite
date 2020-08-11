@@ -5,7 +5,29 @@
 
 <h1>Product Catalog</h1>
 
-@foreach(Product p in Model)
-{
-    <p>@p.Title</p>
-}
+<div class="table-responsive">
+    <table class="table table-hover table-striped">
+        <thead>
+			<tr>
+				<th>Title</th>
+				<th>Price</th>
+				<th>Category</th>
+				<th></th>
+			</tr>
+        </thead>
+		<tbody>
+			@foreach(Product p in Model)
+			{
+				<tr>
+					<td>@p.Title</td>
+					<td>@Html.DisplayFor(m => p.Price)</td>
+					<td>@p.Category</td>
+					<td>
+						<a class="btn btn-secondary" href="">Edit</a>
+						<a class="btn btn-danger" href="">Delete</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+    </table>
+</div>
