@@ -1,0 +1,11 @@
+﻿@model IEnumerable<Product>
+@{
+    ViewData["Title"] = "Product Catalog";
+}
+
+<h1>Product Catalog</h1>
+
+@foreach(Product p in Model)
+{
+    <p>@p.Title</p>
+}
