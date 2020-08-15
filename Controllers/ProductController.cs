@@ -52,5 +52,29 @@ namespace eCommerceSite.Controllers
 
 			return View();
 		}
+
+		[HttpGet]
+		public async Task<IActionResult> Edit(int id)
+		{
+			Product p = await _context
+							.Products
+							.Where(p => p.ProductId == id)
+							.SingleAsync();
+			return View(p);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Edit(Product p)
+		{
+			if (ModelState.IsValid)
+			{
+				_context.Entry(p).State = EntityState.Modified;
+				await _context.SaveChangesAsync();
+
+				ViewBag.Message = "Product updated successfully";
+			}
+
+			return View(p);
+		}
 	}
 }
