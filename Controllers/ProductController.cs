@@ -76,5 +76,33 @@ namespace eCommerceSite.Controllers
 
 			return View(p);
 		}
+
+		[HttpGet]
+		public async Task<IActionResult> Delete(int id)
+		{
+			Product p = await _context
+							.Products
+							.Where(p => p.ProductId == id)
+							.SingleAsync();
+
+			return View(p);
+		}
+
+		[HttpPost]
+		[ActionName("Delete")]
+		public async Task<IActionResult> DeleteConfirmed(int id)
+		{
+			Product p = await _context
+							.Products
+							.Where(p => p.ProductId == id)
+							.SingleAsync();
+
+			_context.Entry(p).State = EntityState.Deleted;
+			await _context.SaveChangesAsync();
+
+			TempData["Message"] = $"{p.Title} was deleted successfully";
+
+			return RedirectToAction("Index");
+		}
 	}
 }
