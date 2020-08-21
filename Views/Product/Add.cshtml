@@ -1,6 +1,6 @@
 ﻿@model Product
 @{
-    ViewData["Title"] = "Add Product";
+	ViewData["Title"] = "Add Product";
 }
 
 <h1>Add Product</h1>
@@ -23,7 +23,11 @@
 			<span asp-validation-for="Category"></span>
 			<br />
 
-			<input type="submit" class="btn btn-outline-primary"/>
+			<input type="submit" class="btn btn-outline-primary" />
 		</div>
 	</div>
 </form>
+
+@section Scripts {
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

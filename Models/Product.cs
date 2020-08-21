@@ -17,17 +17,20 @@ namespace eCommerceSite.Models
 		/// <summary>
 		/// Consumer facing name of product
 		/// </summary>
+		[Required]
 		public string Title { get; set; }
 
 		/// <summary>
 		/// The retail price of the product
 		/// </summary>
 		[DataType(DataType.Currency)]
+		[Required]
 		public double Price { get; set; }
 
 		/// <summary>
 		/// Category product falls under
 		/// </summary>
+		[Required]
 		public string Category { get; set; }
 	}
 }
