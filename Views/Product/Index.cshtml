@@ -43,3 +43,19 @@
 		</tbody>
 	</table>
 </div>
+@*Print page numbers*@
+<ul class="pagination">
+@for(int i = 1; i <= (int)ViewData["MaxPage"]; i++)
+{
+	string classes = "page-item";
+	if(i == (int)ViewData["CurrentPage"])
+	{
+		classes += " active";
+	}
+	<li class="@classes">
+		<a class="page-link" asp-action="Index" asp-route-id="@i">
+			@i
+		</a>
+	</li>
+}
+</ul>
