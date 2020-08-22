@@ -18,12 +18,27 @@ namespace eCommerceSite.Controllers
 		}
 
 		/// <summary>
-		/// Displays a view that lists all products
+		/// Displays a view that lists a page of products
 		/// </summary>
-		public async Task<IActionResult> Index()
+		public async Task<IActionResult> Index(int? id)
 		{
+			int pageNum = id ?? 1;
+			const int PageSize = 3;
+			ViewData["CurrentPage"] = pageNum;
+
+			int numProducts = await _context.Products.CountAsync();
+
+			int totalPages = (int)Math.Ceiling((double)numProducts / PageSize);
+
+			ViewData["MaxPage"] = totalPages;
+
 			// Get all products from database
-			List<Product> products = await _context.Products.ToListAsync();
+			List<Product> products = await _context
+										.Products
+										.OrderBy(p => p.Title)
+										.Skip(PageSize * (pageNum - 1))  // Skip must be before Take()
+										.Take(PageSize)
+										.ToListAsync();
 
 			// Send list of products to view to be displayed
 			return View(products);
