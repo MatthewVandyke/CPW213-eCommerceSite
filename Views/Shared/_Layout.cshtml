@@ -1,4 +1,28 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.EntityFrameworkCore 
+@inject IHttpContextAccessor sessionData
+@inject eCommerceSite.Data.ProductContext db
+@{
+	int? userId = sessionData.HttpContext.Session.GetInt32("UserId");
+	string username = null;
+	if (userId.HasValue )
+	{
+		string userNameFromSession = sessionData.HttpContext.Session.GetString("Username");
+		if (userNameFromSession == null)
+		{
+			username = await db.UserAccounts
+						   .Where(u => u.UserId == userId)
+						   .Select(u => u.Username)
+						   .SingleOrDefaultAsync();
+			sessionData.HttpContext.Session.SetString("Username", username);
+		}
+		else
+		{
+			username = userNameFromSession;
+		}
+
+	}
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -17,20 +41,33 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Product" asp-action="Index">Catalog</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="User" asp-action="Register">Register</a>
-                        </li>
-                    </ul>
+					<ul class="navbar-nav flex-grow-1">
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-controller="Product" asp-action="Index">Catalog</a>
+						</li>
+						@if (!userId.HasValue)
+						{
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-controller="User" asp-action="Register">Register</a>
+						</li>
+
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-controller="User" asp-action="Login">Login</a>
+						</li>
+						}
+						else
+						{
+                            <li class="nav-item">
+                                <a class="nav-link text-dark disabled">Welcome @username!</a>
+                            </li>
+						}
+					</ul>
                 </div>
             </div>
         </nav>

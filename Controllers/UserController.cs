@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using eCommerceSite.Data;
 using eCommerceSite.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace eCommerceSite.Controllers
 {
@@ -45,6 +47,39 @@ namespace eCommerceSite.Controllers
 				return RedirectToAction("Index", "Home");
 			}
 			return View(reg);
+		}
+
+		public IActionResult Login()
+		{
+			if (HttpContext.Session.GetInt32("UserId").HasValue)
+			{
+				return RedirectToAction("Index", "Home");
+			}
+			return View();
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Login(LoginViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
+			UserAccount account = await _context.UserAccounts
+										.Where(u => (u.Username == model.UsernameOrEmail
+												|| u.Email == model.UsernameOrEmail)
+												&& u.Password == model.Password)
+										.SingleOrDefaultAsync();
+			if(account == null)
+			{
+				ModelState.AddModelError(string.Empty, "Credentials were not found");
+
+				return View(model);
+			}
+
+			HttpContext.Session.SetInt32("UserId", account.UserId);
+
+			return RedirectToAction("Index", "Home");
 		}
 	}
 }
