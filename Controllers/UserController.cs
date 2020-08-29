@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using eCommerceSite.Data;
 using eCommerceSite.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -50,6 +51,10 @@ namespace eCommerceSite.Controllers
 
 		public IActionResult Login()
 		{
+			if (HttpContext.Session.GetInt32("UserId").HasValue)
+			{
+				return RedirectToAction("Index", "Home");
+			}
 			return View();
 		}
 
@@ -71,6 +76,8 @@ namespace eCommerceSite.Controllers
 
 				return View(model);
 			}
+
+			HttpContext.Session.SetInt32("UserId", account.UserId);
 
 			return RedirectToAction("Index", "Home");
 		}
