@@ -51,14 +51,14 @@ namespace eCommerceSite.Data
 
 		public static async Task<Product> UpdateProductAsync(ProductContext _context, Product p)
 		{
-			_context.Entry(p).State = EntityState.Modified;
+			_context.Products.Update(p);
 			await _context.SaveChangesAsync();
 			return p;
 		}
 
 		public static async Task DeleteProductAsync(ProductContext _context, Product p)
 		{
-			_context.Entry(p).State = EntityState.Deleted;
+			_context.Products.Remove(p);
 			await _context.SaveChangesAsync();
 		}
 	}
