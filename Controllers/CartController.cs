@@ -26,8 +26,6 @@ namespace eCommerceSite.Controllers
 		/// <param name="id">The id of the product to add</param>
 		public async Task<IActionResult> Add(int id)
 		{
-			const string CartCookie = "CartCookie";
-
 			// Get prod from database
 			Product p =
 				await ProductDb.GetProductAsync(_context, id);
